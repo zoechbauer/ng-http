@@ -11,6 +11,7 @@ import { Post } from './post.interface';
 })
 export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
+  isLoading = false;
 
   constructor(private http: HttpClient) {}
 
@@ -37,6 +38,7 @@ export class AppComponent implements OnInit {
 
   private fetchPosts() {
     const url = environment.apiUrl + 'posts.json';
+    this.isLoading = true;
     this.http
       .get<{ [key: string]: Post }>(url)
       .pipe(
@@ -52,6 +54,7 @@ export class AppComponent implements OnInit {
       )
       .subscribe((posts: Post[]) => {
         this.loadedPosts = posts;
+        this.isLoading = false;
       });
   }
 }
