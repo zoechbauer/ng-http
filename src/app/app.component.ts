@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
+import { Post } from './post.interface';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,10 @@ export class AppComponent implements OnInit {
     this.fetchPosts();
   }
 
-  onCreatePost(postData: { title: string; content: string }) {
+  onCreatePost(postData: Post) {
     // Send Http request
     const url = environment.apiUrl + 'posts.json';
-    this.http.post(url, postData).subscribe(responseData => {
+    this.http.post<{ name: string }>(url, postData).subscribe(responseData => {
       console.log(responseData);
     });
   }
@@ -37,10 +38,10 @@ export class AppComponent implements OnInit {
   private fetchPosts() {
     const url = environment.apiUrl + 'posts.json';
     this.http
-      .get(url)
+      .get<{ [key: string]: Post }>(url)
       .pipe(
         map(responseData => {
-          const postsArray = [];
+          const postsArray: Post[] = [];
           for (const key in responseData) {
             if (responseData.hasOwnProperty(key)) {
               postsArray.push({ ...responseData[key], id: key });
@@ -49,7 +50,7 @@ export class AppComponent implements OnInit {
           return postsArray;
         })
       )
-      .subscribe(posts => {
+      .subscribe((posts: Post[]) => {
         console.log(posts);
       });
   }
