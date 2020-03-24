@@ -10,6 +10,7 @@ import { PostsService } from './posts.service';
 export class AppComponent implements OnInit {
   loadedPosts: Post[] = [];
   isLoading = false;
+  error = null;
 
   constructor(private postsService: PostsService) {}
 
@@ -39,9 +40,23 @@ export class AppComponent implements OnInit {
 
   loadPosts() {
     this.isLoading = true;
-    this.postsService.fetchPosts().subscribe((posts: Post[]) => {
-      this.loadedPosts = posts;
-      this.isLoading = false;
-    });
+    this.postsService.fetchPosts().subscribe(
+      (posts: Post[]) => {
+        this.loadedPosts = posts;
+        this.isLoading = false;
+      },
+      errors => {
+        console.log(errors);
+        // this is allways available
+        this.error = errors.message;
+        // the errorObject depends on your api
+        const errObj = errors.error;
+        if (errObj) {
+          if (errObj.error) {
+            this.error = errObj.error;
+          }
+        }
+      }
+    );
   }
 }
