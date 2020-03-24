@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Post } from './post.interface';
 import { environment } from 'src/environments/environment';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { Observable, Subject, throwError } from 'rxjs';
 
@@ -14,12 +14,17 @@ export class PostsService {
   constructor(private http: HttpClient) {}
 
   fetchPosts(): Observable<Post[]> {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('print', 'pretty');
+    queryParams = queryParams.append('custom', 'key');
     const url = environment.apiUrl + 'posts.json';
     return this.http
       .get<{ [key: string]: Post }>(url, {
         headers: new HttpHeaders({
           'Custom-Header': 'Hello'
-        })
+        }),
+        // params: new HttpParams().set('print', 'pretty')
+        params: queryParams
       })
       .pipe(
         map(
