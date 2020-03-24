@@ -33,4 +33,9 @@ export class PostsService {
       console.log(responseData);
     });
   }
+
+  deletePosts() {
+    const url = environment.apiUrl + 'posts.json';
+    return this.http.delete(url);
+  }
 }
