@@ -14,6 +14,10 @@ export class AuthInterceptService implements HttpInterceptor {
 
     // intercept all requests
     console.log('Request is on the way');
-    return next.handle(req);
+
+    const modifiedRequest = req.clone({
+      headers: req.headers.append('Auth', 'xyz')
+    });
+    return next.handle(modifiedRequest);
   }
 }
