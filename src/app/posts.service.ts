@@ -29,9 +29,7 @@ export class PostsService {
   createAndStorePosts(title: string, content: string) {
     const postData: Post = { title: title, content: content };
     const url = environment.apiUrl + 'posts.json';
-    this.http.post<{ name: string }>(url, postData).subscribe(responseData => {
-      console.log(responseData);
-    });
+    return this.http.post<{ name: string }>(url, postData);
   }
 
   deletePosts() {
