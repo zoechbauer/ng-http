@@ -59,7 +59,7 @@
         </li>
       </ul>
       <p *ngIf="isLoading && !error">Loading ...</p>
-      <div class="alert alert-danger">
+      <div class="alert alert-danger" *ngIf="error">
         <h4>An Error occurred!</h4>
         <p>{{ error }}</p>
       </div>

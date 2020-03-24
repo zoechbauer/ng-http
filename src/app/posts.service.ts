@@ -3,12 +3,14 @@ import { Post } from './post.interface';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostsService {
+  error = new Subject<string>();
+
   constructor(private http: HttpClient) {}
 
   fetchPosts(): Observable<Post[]> {
@@ -29,7 +31,14 @@ export class PostsService {
   createAndStorePosts(title: string, content: string) {
     const postData: Post = { title: title, content: content };
     const url = environment.apiUrl + 'posts.json';
-    return this.http.post<{ name: string }>(url, postData);
+    this.http.post<{ name: string }>(url, postData).subscribe(
+      responseData => {
+        console.log(responseData);
+      },
+      error => {
+        this.error.next(error.message);
+      }
+    );
   }
 
   deletePosts() {
