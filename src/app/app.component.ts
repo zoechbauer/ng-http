@@ -59,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       errors => {
+        this.isLoading = false;
         console.log(errors);
         // this is allways available
         this.error = errors.message;
@@ -71,5 +72,9 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  onHandleError() {
+    this.error = null;
   }
 }
